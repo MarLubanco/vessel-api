@@ -41,7 +41,6 @@ public class EquipmentServiceTest {
 
     @Test
     public void save_saveNewEquipment_ok() throws Exception {
-        vesselService.save(vessel);
         Equipment equipmentPersist = equipmentService.save(equipment);
         Assert.assertEquals("FF3445", equipmentPersist.getCode());
     }
@@ -55,9 +54,15 @@ public class EquipmentServiceTest {
     }
 
     @Test
-    public void getAllByVessel_findListEquipments_ok() throws NotFoundException {
-        List<Equipment> equipments = equipmentService.getAllByVessel("MV200");
-        Assert.assertEquals(1, equipments.size());
+    public void getAllByVessel_findListEquipments_ok() throws Exception {
+        Vessel vesselNew = new Vessel(1, "MV100");
+        vesselService.save(vesselNew);
+        Equipment equipmentNew = new Equipment(1, "test", "AA3445", "Brazil", true, vesselNew);
+        Equipment equipmentO = new Equipment(2, "test", "DAC332", "Brazil", true, vesselNew);
+        equipmentService.save(equipmentNew);
+        equipmentService.save(equipmentO);
+        List<Equipment> equipments = equipmentService.getAllByVessel("MV100");
+        Assert.assertEquals(2, equipments.size());
     }
 
     @Test
