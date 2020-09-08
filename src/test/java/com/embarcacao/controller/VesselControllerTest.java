@@ -26,7 +26,7 @@ public class VesselControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    Vessel vessel = new Vessel(1, "MV200");
+    Vessel vessel = new Vessel(1, "MV11200");
     Vessel vesselOne = new Vessel(2, "XXUO30");
     Vessel vesselTwo = new Vessel(3, "XXUO30");
     Vessel vesselFind = new Vessel(4, "VV3244");
@@ -51,7 +51,7 @@ public class VesselControllerTest {
     @Test
     public void getByCode_ok() throws Exception {
         this.mvc.perform(
-                get("/vessels/MV200/equipments")
+                get("/vessels/MV11200/equipments")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Content-Type", "application/json"))
                 .andExpect(status().isOk());
