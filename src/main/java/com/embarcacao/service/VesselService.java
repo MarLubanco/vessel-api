@@ -6,7 +6,6 @@ import com.embarcacao.model.Vessel;
 import com.embarcacao.repository.VesselRepository;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +19,12 @@ public class VesselService {
     @Autowired
     private EquipmentService equipmentService;
 
+    /**
+     * Save new Vessel
+     * @param vessel
+     * @return
+     * @throws Exception
+     */
     public Vessel save(Vessel vessel) throws Exception {
         Optional<Vessel> vesselExist = vesselRepository.findByCode(vessel.getCode());
         if(!vesselExist.isPresent()) {
@@ -29,10 +34,22 @@ public class VesselService {
         }
     }
 
+    /**
+     * Find equipment by vessel code
+     * @param code
+     * @return
+     * @throws NotFoundException
+     */
     public List<Equipment> getEquipmentsByVesselId(String code) throws NotFoundException {
         return equipmentService.getAllByVessel(code);
     }
 
+    /**
+     * Find vessel by code
+     * @param code
+     * @return
+     * @throws NotFoundException
+     */
     public Vessel getByCode(String code) throws NotFoundException {
         return vesselRepository.findByCode(code).orElseThrow(() -> new NotFoundException("Não Existe"));
     }

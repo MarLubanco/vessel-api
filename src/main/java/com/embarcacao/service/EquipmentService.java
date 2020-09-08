@@ -20,6 +20,12 @@ public class EquipmentService {
     @Autowired
     private VesselService vesselService;
 
+    /**
+     * Save new equipment
+     * @param equipment
+     * @return
+     * @throws Exception
+     */
     public Equipment save(Equipment equipment) throws Exception {
         Optional<Equipment> equipmentExist = equipmentRepository.findByCode(equipment.getCode());
         if(!equipmentExist.isPresent()) {
@@ -29,6 +35,10 @@ public class EquipmentService {
         }
     }
 
+    /**
+     * Inactivates a list of equipment according to its code
+     * @param codes
+     */
     public void inactiveStatusEquipmentByListCodes(List<String> codes) {
         List<Equipment> updateEquipments = equipmentRepository.findByCodeIn(codes).stream()
                 .peek(equipment -> equipment.setStatus(false))
@@ -36,6 +46,12 @@ public class EquipmentService {
         equipmentRepository.saveAll(updateEquipments);
     }
 
+    /**
+     * Recovers all active equipment in a vessel
+     * @param code
+     * @return
+     * @throws NotFoundException
+     */
     public List<Equipment> getAllByVessel(String code) throws NotFoundException {
         Vessel vesselOwner = vesselService.getByCode(code);
         return equipmentRepository.findByVesselAndStatus(vesselOwner, true);
