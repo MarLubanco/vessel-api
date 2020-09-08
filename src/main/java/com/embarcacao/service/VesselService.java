@@ -1,6 +1,7 @@
 package com.embarcacao.service;
 
 import com.embarcacao.exceptions.VesselUniqueException;
+import com.embarcacao.interfaces.VesselServiceImpl;
 import com.embarcacao.model.Equipment;
 import com.embarcacao.model.Vessel;
 import com.embarcacao.repository.VesselRepository;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class VesselService {
+public class VesselService implements VesselServiceImpl {
 
     @Autowired
     private VesselRepository vesselRepository;
@@ -25,6 +26,7 @@ public class VesselService {
      * @return
      * @throws Exception
      */
+    @Override
     public Vessel save(Vessel vessel) throws Exception {
         Optional<Vessel> vesselExist = vesselRepository.findByCode(vessel.getCode());
         if(!vesselExist.isPresent()) {
@@ -40,6 +42,7 @@ public class VesselService {
      * @return
      * @throws NotFoundException
      */
+    @Override
     public List<Equipment> getEquipmentsByVesselId(String code) throws NotFoundException {
         return equipmentService.getAllByVessel(code);
     }
@@ -50,6 +53,7 @@ public class VesselService {
      * @return
      * @throws NotFoundException
      */
+    @Override
     public Vessel getByCode(String code) throws NotFoundException {
         return vesselRepository.findByCode(code).orElseThrow(() -> new NotFoundException("Não Existe"));
     }

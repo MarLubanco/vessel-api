@@ -1,6 +1,7 @@
 package com.embarcacao.service;
 
 import com.embarcacao.exceptions.EquipmentUniqueException;
+import com.embarcacao.interfaces.EquipmentServiceImpl;
 import com.embarcacao.model.Equipment;
 import com.embarcacao.model.Vessel;
 import com.embarcacao.repository.EquipmentRepository;
@@ -13,7 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class EquipmentService {
+public class EquipmentService implements EquipmentServiceImpl {
 
     @Autowired
     private EquipmentRepository equipmentRepository;
@@ -26,6 +27,7 @@ public class EquipmentService {
      * @return
      * @throws Exception
      */
+    @Override
     public Equipment save(Equipment equipment) throws Exception {
         Optional<Equipment> equipmentExist = equipmentRepository.findByCode(equipment.getCode());
         if(!equipmentExist.isPresent()) {
@@ -39,6 +41,7 @@ public class EquipmentService {
      * Inactivates a list of equipment according to its code
      * @param codes
      */
+    @Override
     public void inactiveStatusEquipmentByListCodes(List<String> codes) {
         List<Equipment> updateEquipments = equipmentRepository.findByCodeIn(codes).stream()
                 .peek(equipment -> equipment.setStatus(false))
@@ -52,6 +55,7 @@ public class EquipmentService {
      * @return
      * @throws NotFoundException
      */
+    @Override
     public List<Equipment> getAllByVessel(String code) throws NotFoundException {
         Vessel vesselOwner = vesselService.getByCode(code);
         return equipmentRepository.findByVesselAndStatus(vesselOwner, true);
