@@ -20,7 +20,7 @@ public class EquipmentController {
     }
 
     @PutMapping
-    public void updateStatusEquipment(@RequestBody List<Integer> ids) {
-        equipmentService.inactiveStatusEquipmentByListId(ids);
+    public void updateStatusEquipment(@RequestBody List<String> codes) {
+        equipmentService.inactiveStatusEquipmentByListCodes(codes);
     }
 }

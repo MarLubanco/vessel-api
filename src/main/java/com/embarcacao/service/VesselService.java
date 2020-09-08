@@ -1,5 +1,6 @@
 package com.embarcacao.service;
 
+import com.embarcacao.exceptions.VesselUniqueException;
 import com.embarcacao.model.Equipment;
 import com.embarcacao.model.Vessel;
 import com.embarcacao.repository.VesselRepository;
@@ -24,7 +25,7 @@ public class VesselService {
         if(!vesselExist.isPresent()) {
             return vesselRepository.save(vessel);
         } else {
-            throw new Exception("Error - Existing vessel code");
+            throw new VesselUniqueException("Error - Existing vessel code");
         }
     }
 

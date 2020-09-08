@@ -1,5 +1,6 @@
 package com.embarcacao.service;
 
+import com.embarcacao.exceptions.EquipmentUniqueException;
 import com.embarcacao.model.Equipment;
 import com.embarcacao.model.Vessel;
 import com.embarcacao.repository.EquipmentRepository;
@@ -20,16 +21,16 @@ public class EquipmentService {
     private VesselService vesselService;
 
     public Equipment save(Equipment equipment) throws Exception {
-        Optional<Vessel> vesselExist = equipmentRepository.findByCode(equipment.getCode());
-        if(!vesselExist.isPresent()) {
+        Optional<Equipment> equipmentExist = equipmentRepository.findByCode(equipment.getCode());
+        if(!equipmentExist.isPresent()) {
             return equipmentRepository.save(equipment);
         } else {
-            throw new Exception("Error - Existing vessel code");
+            throw new EquipmentUniqueException("Error - Existing equipment code");
         }
     }
 
-    public void inactiveStatusEquipmentByListId(List<Integer> idsEquipmente) {
-        List<Equipment> updateEquipments = equipmentRepository.findByIdIn(idsEquipmente).stream()
+    public void inactiveStatusEquipmentByListCodes(List<String> codes) {
+        List<Equipment> updateEquipments = equipmentRepository.findByCodeIn(codes).stream()
                 .peek(equipment -> equipment.setStatus(false))
                 .collect(Collectors.toList());
         equipmentRepository.saveAll(updateEquipments);

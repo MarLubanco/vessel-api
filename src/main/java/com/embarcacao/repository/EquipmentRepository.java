@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EquipmentRepository extends JpaRepository<Equipment, Integer> {
-    Optional<Vessel> findByCode(String code);
+    Optional<Equipment> findByCode(String code);
 
-    List<Equipment> findByIdIn(List<Integer> idsEquipmente);
+    List<Equipment> findByCodeIn(List<String> codes);
 
     List<Equipment> findByVesselAndStatus(Vessel vesselOwner, boolean status);
 }
