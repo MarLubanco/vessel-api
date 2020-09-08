@@ -5,6 +5,7 @@ import com.embarcacao.exceptions.EquipmentUniqueException;
 import com.embarcacao.exceptions.VesselUniqueException;
 import com.embarcacao.model.Equipment;
 import com.embarcacao.model.Vessel;
+import com.embarcacao.repository.EquipmentRepository;
 import javassist.NotFoundException;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -15,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = EmbarcacaoApplication.class)
@@ -23,6 +26,8 @@ public class EquipmentServiceTest {
 
     @Autowired
     private EquipmentService equipmentService;
+    @Autowired
+    private EquipmentRepository equipmentRepository;
     @Autowired
     private VesselService vesselService;
     @Rule
@@ -59,5 +64,14 @@ public class EquipmentServiceTest {
     public void getAllByVessel_findListEquipments_failed() throws NotFoundException {
         thrown.expect(NotFoundException.class);
         equipmentService.getAllByVessel("MV6700");
+    }
+
+    @Test
+    public void inactiveStatusEquipmentByListCodes_ok() throws Exception {
+        Equipment equipmentStatus = new Equipment(10, "test", "BBDF2", "Brazil", true, vessel);
+        equipmentService.save(equipmentStatus);
+        equipmentService.inactiveStatusEquipmentByListCodes(Arrays.asList("BBDF2"));
+        Optional<Equipment> equipamentUpdate = equipmentRepository.findByCode("BBDF2");
+        Assert.assertEquals(false, equipamentUpdate.get().isStatus());
     }
 }
